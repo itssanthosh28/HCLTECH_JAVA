@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MealDB Explorer</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🍽️ MealDB Explorer</h1>
+    <p>Search, Filter & Sort Meals by Ingredients</p>
+  </header>
+
+  <section class="controls">
+    <input type="text" id="searchInput" placeholder="Search meal (e.g. Arrabiata)" />
+    <button onclick="searchByName()">Search</button>
+
+    <select id="filterType">
+      <option value="random">Random Meal</option>
+      <option value="letter">By First Letter</option>
+      <option value="ingredient">By Ingredient</option>
+      <option value="category">By Category</option>
+      <option value="area">By Area</option>
+    </select>
+
+    <input type="text" id="filterValue" placeholder="Value (a / chicken / Seafood)" />
+    <button onclick="applyFilter()">Apply</button>
+
+    <button onclick="loadRandom()">🎲 Random</button>
+  </section>
+
+  <section id="mealContainer" class="meal-container"></section>
+
+  <footer>
+    <p>Powered by TheMealDB API</p>
+  </footer>
+
+  <script src="./scipt.js"></script>
+</body>
+</html>
