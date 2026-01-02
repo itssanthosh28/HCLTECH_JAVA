@@ -1,16 +1,15 @@
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  background: #f4f6f9;
-  color: #333;
+  background: #f4f4f4;
 }
 
 header {
-  background: linear-gradient(135deg, #ff7043, #ff5722);
+  background: #ff5722;
   color: white;
   padding: 20px;
   text-align: center;
@@ -18,55 +17,40 @@ header {
 
 .controls {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   padding: 15px;
   justify-content: center;
   background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.controls input,
-.controls select,
-.controls button {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.controls input, select, button {
+  padding: 8px;
 }
 
-.controls button {
+button {
   background: #ff5722;
   color: white;
   border: none;
   cursor: pointer;
 }
 
-.controls button:hover {
-  background: #e64a19;
-}
-
 .meal-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
 .meal-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.meal-card:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .meal-card img {
   width: 100%;
-  height: 200px;
+  height: 180px;
   object-fit: cover;
 }
 
@@ -75,22 +59,49 @@ header {
 }
 
 .meal-info h3 {
-  margin: 0 0 10px;
+  color: #ff5722;
+  cursor: pointer;
 }
 
 .badge {
-  display: inline-block;
   background: #4caf50;
   color: white;
   padding: 4px 8px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 12px;
-  margin-bottom: 10px;
+  display: inline-block;
+  margin-bottom: 8px;
 }
 
-footer {
-  text-align: center;
-  padding: 10px;
-  background: #222;
-  color: white;
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
 }
