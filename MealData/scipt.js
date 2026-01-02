@@ -96,15 +96,34 @@ function applyFilter() {
   }
 
   if (!value) {
-    alert("Enter value");
+    alert("Please enter a value");
     return;
   }
 
-  if (type === "letter") fetchMeals(`search.php?f=${value}`);
-  if (type === "ingredient") fetchFilteredMeals(`filter.php?i=${value}`);
-  if (type === "category") fetchFilteredMeals(`filter.php?c=${value}`);
-  if (type === "area") fetchFilteredMeals(`filter.php?a=${value}`);
+  switch (type) {
+    case "name":
+      // 🔥 SEARCH BY NAME
+      fetchMeals(`search.php?s=${value}`);
+      break;
+
+    case "letter":
+      fetchMeals(`search.php?f=${value}`);
+      break;
+
+    case "ingredient":
+      fetchFilteredMeals(`filter.php?i=${value}`);
+      break;
+
+    case "category":
+      fetchFilteredMeals(`filter.php?c=${value}`);
+      break;
+
+    case "area":
+      fetchFilteredMeals(`filter.php?a=${value}`);
+      break;
+  }
 }
+
 
 // ---------- MODAL ----------
 function openModal(meal) {
