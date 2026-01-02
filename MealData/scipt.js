@@ -1,128 +1,121 @@
-// ================= CONFIG =================
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
 const container = document.getElementById("mealContainer");
 
-// ================= HELPERS =================
-
-// Fetch full meal details by ID (needed for filter APIs)
+// ---------- FETCH FULL MEAL ----------
 async function fetchFullMeal(id) {
   const res = await fetch(`${BASE_URL}lookup.php?i=${id}`);
   const data = await res.json();
-  return data.meals ? data.meals[0] : null;
+  return data.meals[0];
 }
 
-// Count ingredients safely
+// ---------- INGREDIENT COUNT ----------
 function countIngredients(meal) {
   let count = 0;
   for (let i = 1; i <= 20; i++) {
-    const ing = meal[`strIngredient${i}`];
-    if (ing && ing.trim() !== "") count++;
+    if (meal[`strIngredient${i}`] && meal[`strIngredient${i}`].trim()) {
+      count++;
+    }
   }
   return count;
 }
 
-// ================= CORE FETCH =================
-
-// For search.php, search by letter, random.php (FULL data already)
+// ---------- FETCH NORMAL ----------
 async function fetchMeals(endpoint) {
-  container.innerHTML = "<h2>Loading meals...</h2>";
+  container.innerHTML = "<h2>Loading...</h2>";
 
-  try {
-    const res = await fetch(BASE_URL + endpoint);
-    const data = await res.json();
+  const res = await fetch(BASE_URL + endpoint);
+  const data = await res.json();
 
-    if (!data.meals) {
-      container.innerHTML = "<h2>No meals found</h2>";
-      return;
-    }
-
-    displayMeals(data.meals);
-  } catch (err) {
-    container.innerHTML = "<h2>Error loading meals</h2>";
+  if (!data.meals) {
+    container.innerHTML = "<h2>No meals found</h2>";
+    return;
   }
+
+  displayMeals(data.meals);
 }
 
-// For filter.php APIs (PARTIAL data → must lookup)
+// ---------- FETCH FILTER ----------
 async function fetchFilteredMeals(endpoint) {
-  container.innerHTML = "<h2>Loading meals...</h2>";
+  container.innerHTML = "<h2>Loading...</h2>";
 
-  try {
-    const res = await fetch(BASE_URL + endpoint);
-    const data = await res.json();
+  const res = await fetch(BASE_URL + endpoint);
+  const data = await res.json();
 
-    if (!data.meals) {
-      container.innerHTML = "<h2>No meals found</h2>";
-      return;
-    }
-
-    // Fetch full data for each meal
-    const fullMeals = (
-      await Promise.all(
-        data.meals.map(meal => fetchFullMeal(meal.idMeal))
-      )
-    ).filter(Boolean);
-
-    displayMeals(fullMeals);
-
-  } catch (error) {
-    container.innerHTML = "<h2>Error loading meals</h2>";
+  if (!data.meals) {
+    container.innerHTML = "<h2>No meals found</h2>";
+    return;
   }
+
+  const fullMeals = await Promise.all(
+    data.meals.map(m => fetchFullMeal(m.idMeal))
+  );
+
+  displayMeals(fullMeals);
 }
 
-// ================= UI RENDER =================
-
+// ---------- DISPLAY ----------
 function displayMeals(meals) {
-  meals.sort((a, b) => countIngredients(a) - countIngredients(b));
+  meals.sort((a, b) => countIngredients(b) - countIngredients(a));
 
   container.innerHTML = meals.map(meal => `
     <div class="meal-card">
-      <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+      <img src="${meal.strMealThumb}">
       <div class="meal-info">
         <span class="badge">${countIngredients(meal)} Ingredients</span>
-        <h3>${meal.strMeal}</h3>
-        <p><b>Category:</b> ${meal.strCategory || "N/A"}</p>
-        <p><b>Area:</b> ${meal.strArea || "N/A"}</p>
+        <h3 onclick='openModal(${JSON.stringify(meal)})'>${meal.strMeal}</h3>
+        <p>Category: ${meal.strCategory || "N/A"}</p>
+        <p>Area: ${meal.strArea || "N/A"}</p>
       </div>
     </div>
   `).join("");
 }
 
-// ================= CONTROLS =================
-
+// ---------- FILTER ----------
 function applyFilter() {
   const type = document.getElementById("filterType").value;
   const value = document.getElementById("filterValue").value.trim();
 
-  if (!value && type !== "random") {
-    alert("Please enter a value");
+  if (type === "random") {
+    fetchMeals("random.php");
     return;
   }
 
-  switch (type) {
-    case "letter":
-      fetchMeals(`search.php?f=${value}`);
-      break;
-
-    case "ingredient":
-      fetchFilteredMeals(`filter.php?i=${value}`);
-      break;
-
-    case "category":
-      fetchFilteredMeals(`filter.php?c=${value}`);
-      break;
-
-    case "area":
-      fetchFilteredMeals(`filter.php?a=${value}`);
-      break;
-
-    default:
-      loadRandom();
+  if (!value) {
+    alert("Enter value");
+    return;
   }
+
+  if (type === "letter") fetchMeals(`search.php?f=${value}`);
+  if (type === "ingredient") fetchFilteredMeals(`filter.php?i=${value}`);
+  if (type === "category") fetchFilteredMeals(`filter.php?c=${value}`);
+  if (type === "area") fetchFilteredMeals(`filter.php?a=${value}`);
 }
 
-function loadRandom() {
-  fetchMeals("random.php");
+// ---------- MODAL ----------
+function openModal(meal) {
+  document.getElementById("mealModal").classList.remove("hidden");
+  document.getElementById("modalTitle").innerText = meal.strMeal;
+
+  const list = document.getElementById("ingredientList");
+  list.innerHTML = "";
+
+  for (let i = 1; i <= 20; i++) {
+    const ing = meal[`strIngredient${i}`];
+    const measure = meal[`strMeasure${i}`];
+    if (ing && ing.trim()) {
+      const li = document.createElement("li");
+      li.innerText = `${ing} - ${measure || ""}`;
+      list.appendChild(li);
+    }
+  }
+
+  document.getElementById("instructions").innerText =
+    meal.strInstructions || "No instructions available";
 }
 
-// ================= INITIAL LOAD =================
-loadRandom();
+function closeModal() {
+  document.getElementById("mealModal").classList.add("hidden");
+}
+
+// ---------- INITIAL ----------
+fetchMeals("random.php");
