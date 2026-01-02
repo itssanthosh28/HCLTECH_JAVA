@@ -59,16 +59,31 @@ function displayMeals(meals) {
 
   container.innerHTML = meals.map(meal => `
     <div class="meal-card">
-      <img src="${meal.strMealThumb}">
+      
+      <!-- CLICKABLE IMAGE -->
+
+      <img 
+        src="${meal.strMealThumb}" 
+        alt="${meal.strMeal}"
+        onclick='openModal(${JSON.stringify(meal)})'
+        style="cursor:pointer"
+      >
+
       <div class="meal-info">
         <span class="badge">${countIngredients(meal)} Ingredients</span>
-        <h3 onclick='openModal(${JSON.stringify(meal)})'>${meal.strMeal}</h3>
+
+        <!-- CLICKABLE NAME -->
+
+        <h3 onclick='openModal(${JSON.stringify(meal)})'>
+          ${meal.strMeal}
+        </h3>
         <p>Category: ${meal.strCategory || "N/A"}</p>
         <p>Area: ${meal.strArea || "N/A"}</p>
       </div>
     </div>
   `).join("");
 }
+
 
 // ---------- FILTER ----------
 function applyFilter() {
@@ -116,6 +131,12 @@ function openModal(meal) {
 function closeModal() {
   document.getElementById("mealModal").classList.add("hidden");
 }
+
+document.getElementById("mealModal").addEventListener("click", function (e) {
+  if (e.target.id === "mealModal") {
+    closeModal();
+  }
+});
 
 // ---------- INITIAL ----------
 fetchMeals("random.php");
