@@ -8,37 +8,50 @@ body {
   background: #f4f4f4;
 }
 
+/* ---------- HEADER ---------- */
 header {
   background: #ff5722;
   color: white;
-  padding: 20px;
+  padding: 16px;
   text-align: center;
 }
 
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* ---------- CONTROLS ---------- */
 .controls {
   display: flex;
   gap: 10px;
-  padding: 15px;
+  padding: 12px;
   justify-content: center;
   background: white;
+  flex-wrap: wrap;
 }
 
-.controls input, select, button {
-  padding: 8px;
+.controls input,
+.controls select,
+.controls button {
+  padding: 10px;
+  font-size: 16px;
 }
 
-button {
+.controls button {
   background: #ff5722;
   color: white;
   border: none;
   cursor: pointer;
+  min-height: 44px; /* touch friendly */
 }
 
+/* ---------- MEAL GRID ---------- */
 .meal-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  gap: 16px;
+  padding: 16px;
 }
 
 .meal-card {
@@ -52,38 +65,44 @@ button {
   width: 100%;
   height: 180px;
   object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.meal-card img:hover {
+  transform: scale(1.03);
 }
 
 .meal-info {
-  padding: 15px;
+  padding: 14px;
 }
 
 .meal-info h3 {
   color: #ff5722;
   cursor: pointer;
+  margin: 8px 0;
+  line-height: 1.4;
 }
 
+/* ---------- BADGE ---------- */
 .badge {
   background: #4caf50;
   color: white;
   padding: 4px 8px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 12px;
   display: inline-block;
-  margin-bottom: 8px;
 }
 
-/* MODAL */
+/* ---------- MODAL ---------- */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+  inset: 0;
   background: rgba(0,0,0,0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal.hidden {
@@ -92,11 +111,11 @@ button {
 
 .modal-content {
   background: white;
-  width: 90%;
+  width: 95%;
   max-width: 600px;
-  padding: 20px;
+  padding: 16px;
   border-radius: 10px;
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
 }
 
@@ -104,4 +123,40 @@ button {
   float: right;
   font-size: 24px;
   cursor: pointer;
+}
+
+/* ---------- MOBILE ONLY ---------- */
+@media (max-width: 600px) {
+
+  header h1 {
+    font-size: 20px;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls input,
+  .controls select,
+  .controls button {
+    width: 100%;
+  }
+
+  .meal-container {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  .meal-card img {
+    height: 200px;
+  }
+
+  .modal-content h2 {
+    font-size: 18px;
+  }
+
+  .modal-content h3 {
+    font-size: 16px;
+  }
 }
