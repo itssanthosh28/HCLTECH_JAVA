@@ -55,7 +55,7 @@ async function fetchFilteredMeals(endpoint) {
 
 // ---------- DISPLAY ----------
 function displayMeals(meals) {
-  meals.sort((a, b) => countIngredients(b) - countIngredients(a));
+  meals.sort((a, b) => countIngredients(a) - countIngredients(b));
 
   container.innerHTML = meals.map(meal => `
     <div class="meal-card">
