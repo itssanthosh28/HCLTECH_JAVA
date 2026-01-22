@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rest Countries Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🌍 Rest Countries Explorer</h1>
+</header>
+
+<section class="controls">
+  <select id="apiType">
+    <option value="name">Search by Name</option>
+    <option value="alpha">Search by Country Code</option>
+    <option value="currency">Search by Currency</option>
+    <option value="demonym">Search by Demonym</option>
+    <option value="lang">Search by Language</option>
+    <option value="capital">Search by Capital</option>
+  </select>
+
+  <input type="text" id="queryInput" placeholder="Enter country name">
+  <button id="searchBtn">Search</button>
+</section>
+
+<section id="countries" class="countries"></section>
+<!-- COUNTRY MODAL -->
+<div id="countryModal" class="modal hidden">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>
